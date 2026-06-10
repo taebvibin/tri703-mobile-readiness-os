@@ -112,10 +112,25 @@ function weekRangeLabel(w=currentWeek()){
  return `${fmtDate(s)} – ${fmtDate(e)}`
 }
 function activeWeekView(){return state.previewWeek===null||state.previewWeek===undefined?currentWeek():Number(state.previewWeek)}
+function sameDate(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function isRaceDate(d){return sameDate(d,dateMid(state.race||"2026-09-26"))}
+function isAfterRaceDate(d){const x=new Date(d);x.setHours(0,0,0,0);return x>dateMid(state.race||"2026-09-26")}
+function raceDayWorkout(){return [{type:"race",title:"Race Day — 70.3",desc:"Execute. No training workout. Stay calm, fuel early, and keep moving.",priority:"Race"}]}
+function postRaceWorkout(){return [{type:"rest",title:"Post-race recovery",desc:"No planned training. Walk, eat, hydrate, sleep, and recover.",priority:"Recovery"}]}
+function applyRaceCalendarToPlan(p,w=currentWeek()){
+ const out={};DAYS.forEach(day=>{
+   const d=dateForDay(day,w);
+   if(isRaceDate(d)) out[day]=raceDayWorkout();
+   else if(isAfterRaceDate(d)) out[day]=postRaceWorkout();
+   else out[day]=p[day]||[];
+ });
+ return out;
+}
+
 
 function key(day,i,w=currentWeek()){return `w${w}-${day}-${i}`}
 function toast(t="Saved"){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1100)}
-function icon(t){return t==="swim"?"🌊":t==="longbike"||t==="bike"?"🚴":t==="run"?"👟":t==="bjj"?"🥋":t==="lift"?"🏋️":"•"}
+function icon(t){return t==="swim"?"🌊":t==="longbike"||t==="bike"?"🚴":t==="run"?"👟":t==="bjj"?"🥋":t==="lift"?"🏋️":t==="race"?"🏁":t==="rest"?"🛌":"•"}
 function lessonActive(){const now=new Date();now.setHours(0,0,0,0);const start=dateMid(state.lesson?.start||state.start||"2026-07-07");const end=new Date((state.lesson?.end||"2026-08-23")+"T23:59:59");return state.lesson?.enabled!==false && now>=start && now<=end}
 function isLessonDay(day=todayName()){return lessonActive()&&day==="Thursday"}
 function planForWeek(w=currentWeek()){
@@ -160,6 +175,7 @@ function weekAnchors(){
  ];
 }
 function nextMove(){
+ const today=new Date();today.setHours(0,0,0,0);if(isRaceDate(today))return["Race day.","Execute the 70.3. No training workouts today.","Going out too hard · underfueling · panic"];if(isAfterRaceDate(today))return["Recover.","No planned training after race day. Walk, eat, hydrate, sleep.","Training through recovery"];
  const ws=workoutsToday();
  if(preseason())return isLessonDay()?["Go to swim lesson.","Show up, practice calm breathing, add one coach note.","Hard shoulder BJJ · guilt tracking"]:["Build comfort, not volume.","Optional swim/bike/run only. No pressure before July 7.","Hero workouts · cramming · guilt tracking"];
  if(isLessonDay())return["Go to Thursday swim lesson.","This is your technique anchor and counts toward swim frequency.","Hard shoulder BJJ · judging by speed"];
@@ -168,9 +184,9 @@ function nextMove(){
  if(ws.some(x=>x.type==="bike"))return["Ride easy and drink while moving.","Bike comfort compounds fast.","Turning it into a test"];
  return["Keep the week intact.","Do the minimum and protect the next anchor.","Cramming missed workouts"];
 }
-function minFor(w){if(w.type==="longbike")return"60–75% duration + fuel practice";if(w.type==="swim")return"Show up and stay calm; shorten if needed";if(w.type==="bike")return"30–45 min easy";if(w.type==="run")return"20–30 min easy";if(w.type==="bjj")return"Technique only or skip";if(w.type==="lift")return"Skip or one light circuit";return"Short easy version"}
-function whyFor(w){if(w.type==="longbike")return"Bike durability/fueling anchor";if(w.type==="swim")return"Build calm technique through frequency";if(w.type==="bike")return"Comfort, handling, bottle practice";if(w.type==="run")return"Maintain your run base";if(w.type==="bjj")return"Keep life normal, but secondary to tri anchors";if(w.type==="lift")return"Maintenance only";return"Supports week"}
-function avoidFor(w){if(w.type==="longbike")return"Hard BJJ, heavy legs, skipping fuel";if(w.type==="swim")return"Panic reps, rushed progression";if(w.type==="bike")return"Hard efforts, poor handling practice";if(w.type==="run")return"Chasing pace";if(w.type==="bjj")return"Ego rounds before key sessions";if(w.type==="lift")return"Soreness or failure sets";return"Cramming"}
+function minFor(w){if(w.type==="longbike")return"60–75% duration + fuel practice";if(w.type==="swim")return"Show up and stay calm; shorten if needed";if(w.type==="bike")return"30–45 min easy";if(w.type==="run")return"20–30 min easy";if(w.type==="bjj")return"Technique only or skip";if(w.type==="lift")return"Skip or one light circuit";if(w.type==="race")return"Start calm and execute the race plan";if(w.type==="rest")return"Walk, hydrate, eat, sleep";return"Short easy version"}
+function whyFor(w){if(w.type==="longbike")return"Bike durability/fueling anchor";if(w.type==="swim")return"Build calm technique through frequency";if(w.type==="bike")return"Comfort, handling, bottle practice";if(w.type==="run")return"Maintain your run base";if(w.type==="bjj")return"Keep life normal, but secondary to tri anchors";if(w.type==="lift")return"Maintenance only";if(w.type==="race")return"Race day";if(w.type==="rest")return"Recovery after race";return"Supports week"}
+function avoidFor(w){if(w.type==="longbike")return"Hard BJJ, heavy legs, skipping fuel";if(w.type==="swim")return"Panic reps, rushed progression";if(w.type==="bike")return"Hard efforts, poor handling practice";if(w.type==="run")return"Chasing pace";if(w.type==="bjj")return"Ego rounds before key sessions";if(w.type==="lift")return"Soreness or failure sets";if(w.type==="race")return"Going out too hard, underfueling, panic";if(w.type==="rest")return"Training through recovery";return"Cramming"}
 function numFromTitle(title){
  const m=String(title).match(/(\d+):(\d+)/);
  if(m)return Number(m[1])*60+Number(m[2]);
@@ -204,6 +220,8 @@ function targetFor(w,wk=currentWeek()){
  }
  if(w.type==="bjj")return {time:"1 class or controlled rounds",distance:"—",hr:"Keep intensity controlled",fuel:"Do not let it wreck key swim/bike days"};
  if(w.type==="lift")return {time:"25–45 min",distance:"—",hr:"Easy/moderate",fuel:"No failure sets; no soreness goal"};
+ if(w.type==="race")return {time:"Race day",distance:"70.3 miles",hr:"Controlled start; race effort",fuel:"Fuel early and consistently"};
+ if(w.type==="rest")return {time:"Recovery",distance:"Optional walk",hr:"Very easy",fuel:"Eat, hydrate, sleep"};
  return {time:"As written",distance:"—",hr:"Easy",fuel:"—"};
 }
 function targetHtml(w,wk=currentWeek()){
@@ -347,7 +365,7 @@ function clearWeekAdjustment(){
 }
 function adjustedPlanForWeek(w=currentWeek()){
  const p=planForWeek(w), a=state.weekAdjust?.[w];
- if(!a||!a.type)return p;
+ if(!a||!a.type)return applyRaceCalendarToPlan(p,w);
  const clone={};DAYS.forEach(d=>clone[d]=[...(p[d]||[])].map(x=>({...x})));
  if(a.type==="sat"){
    const long=(clone.Saturday||[]).find(x=>x.type==="longbike");
@@ -368,7 +386,7 @@ function adjustedPlanForWeek(w=currentWeek()){
  if(a.type==="pool"){
    DAYS.forEach(d=>clone[d]=(clone[d]||[]).map(x=>x.type==="swim"?{...x,title:"Pool blocked / swim deferred",desc:"No pool access. Resume swim next available day; do not cram.",priority:"Important"}:x));
  }
- return clone;
+ return applyRaceCalendarToPlan(clone,w);
 }
 
 function adjustRecommendation(){

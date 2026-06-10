@@ -6,14 +6,16 @@ Current fixed inputs:
 - Swim lessons start Week 1 and run through Aug 23
 - HR / effort, distance, time, and fueling targets are shown on workout cards
 
-Current working change:
-- Adds Apply simple adjustment for:
+Current working changes:
+- Sept 26 now displays as Race Day — 70.3.
+- Days after Sept 26 show post-race recovery/no planned workouts.
+- Adds reversible simple week adjustments:
   - Saturday unavailable
   - Sunday unavailable
   - Missed swim lesson
   - No pool access
 - Adds Undo / clear adjustment.
-- Adjustments overlay the week and can be reversed; they do not permanently delete base workouts.
+- Adjustments overlay the week and can be reversed.
 
 Upload to GitHub Pages repo root when ready:
 - index.html

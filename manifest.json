@@ -5,5 +5,5 @@
   "display": "standalone",
   "background_color": "#f7f8fb",
   "theme_color": "#111827",
-  "description": "Current working build with HR targets and reversible simple week adjustments."
+  "description": "Current working build with race day calendar cutoff, HR targets, and reversible simple week adjustments."
 }
