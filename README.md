@@ -1,24 +1,21 @@
-# 70.3 Mobile Readiness OS v2.4
+# 70.3 OS Current Working Build
 
-Personalized for Taejin:
+Current fixed inputs:
 - Week 1 starts July 7, 2026
-- Thursday evening swim lesson anchor through Aug 23, 2026
-- Beginner swim + beginner bike + strong run base
-- BJJ-aware and lift-maintenance logic
-- Vacation/social/life adjustment module
+- Race date is September 26, 2026
+- Swim lessons start Week 1 and run through Aug 23
+- HR / effort, distance, time, and fueling targets are shown on workout cards
 
-New in v2.4:
-- Premium Today screen centered on Next Best Move
-- Whimsical embedded SVG hero visuals
-- Cleaner mission hierarchy
-- Finish Confidence meter
-- Life Happens / Adjust This Week module
-- Swim progression path visual
-- Illustrated gear locker
-- PWA cache update improvements
-- Local-data privacy note
+Current working change:
+- Adds Apply simple adjustment for:
+  - Saturday unavailable
+  - Sunday unavailable
+  - Missed swim lesson
+  - No pool access
+- Adds Undo / clear adjustment.
+- Adjustments overlay the week and can be reversed; they do not permanently delete base workouts.
 
-Upload these three files to your GitHub Pages repo root:
+Upload to GitHub Pages repo root when ready:
 - index.html
 - manifest.json
 - service-worker.js
