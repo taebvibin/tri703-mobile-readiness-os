@@ -1,9 +1,9 @@
 {
-  "name": "70.3 Mobile Readiness OS",
+  "name": "70.3 Mobile Readiness OS v2.3",
   "short_name": "70.3 OS",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7f8fb",
   "theme_color": "#111827",
-  "description": "Low-friction 70.3 readiness planner with swim progression, BJJ fatigue, and race-readiness benchmarks."
+  "description": "Low-friction 70.3 readiness planner with move/adjust rules, swim progression, BJJ fatigue, and race-readiness benchmarks."
 }

@@ -1,22 +1,14 @@
-# 70.3 Mobile Readiness OS
+# 70.3 Mobile Readiness OS v2.3
 
-Low-friction mobile-first training app.
+Adds:
+- Move / Adjust workout button
+- Adjust tab with social/travel/weather/pain/BJJ-moved rules
+- BJJ week selector: Mon/Tue, Tue/Wed, Tue double only, one day, skip
+- Minimum viable week rules
+- Weekly anchors dashboard
+- Swim workout generator by current swim level
+- Fueling prompts for long bikes
+- Equipment checklist
+- Ask ChatGPT handoff: copies app context to clipboard
 
-## What changed
-- One-tap daily readiness: Green / Yellow / Red
-- Optional Garmin readiness and limiter fields hidden behind details
-- Done / Partial / Skipped for workouts
-- Extra questions only after key sessions:
-  - Swim: controlled / hard / panic
-  - Long bike: fueling and brick
-  - BJJ: intensity and optional damage
-- Mobile-first layout with bottom navigation
-- Swim ladder
-- Week view
-- Race-readiness dashboard
-- Saves progress locally in the browser
-
-## Use on phone
-1. Open index.html or host the folder.
-2. On iPhone Safari, tap Share > Add to Home Screen.
-3. Progress saves in browser local storage.
+Upload `index.html`, `manifest.json`, and `service-worker.js` to GitHub Pages root.

@@ -4,553 +4,216 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#111827" />
-  <title>70.3 Mobile Readiness OS</title>
+  <link rel="manifest" href="./manifest.json" />
+  <title>70.3 Mobile Readiness OS v2.3</title>
   <style>
-    :root {
-      --bg: #f7f8fb;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --border: #e5e7eb;
-      --soft: #f1f5f9;
-      --dark: #111827;
-      --green: #16a34a;
-      --yellow: #ca8a04;
-      --red: #dc2626;
-      --blue: #2563eb;
-      --shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-      --radius: 20px;
-    }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    body { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
-    button, select, input, textarea { font: inherit; }
-    .app { max-width: 980px; margin: 0 auto; padding: 16px; }
-    .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
-    .eyebrow { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-    h1 { margin: 3px 0 0; font-size: clamp(28px, 8vw, 44px); letter-spacing: -0.05em; line-height: .95; }
-    h2 { margin: 0; font-size: 22px; letter-spacing: -0.03em; }
-    h3 { margin: 0; font-size: 16px; letter-spacing: -0.01em; }
-    p { margin: 0; color: var(--muted); line-height: 1.45; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
-    .stack { display: flex; flex-direction: column; gap: 12px; }
-    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .grid { display: grid; gap: 12px; }
-    .grid.two { grid-template-columns: 1fr 1fr; }
-    .muted { color: var(--muted); }
-    .btn { border: 1px solid var(--border); background: white; border-radius: 16px; padding: 12px 14px; min-height: 46px; color: var(--text); cursor: pointer; font-weight: 800; }
-    .btn:active { transform: scale(.99); }
-    .btn.primary { background: var(--dark); color: white; border-color: var(--dark); }
-    .btn.ghost { background: var(--soft); border-color: transparent; }
-    .btn.small { min-height: 36px; padding: 8px 11px; border-radius: 12px; font-size: 13px; }
-    .btn.green { background: #dcfce7; border-color: #bbf7d0; color: #14532d; }
-    .btn.yellow { background: #fef3c7; border-color: #fde68a; color: #713f12; }
-    .btn.red { background: #fee2e2; border-color: #fecaca; color: #7f1d1d; }
-    .pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 900; background: var(--soft); color: var(--text); white-space: nowrap; }
-    .pill.critical { background: #fee2e2; color: #991b1b; }
-    .pill.important { background: #fef3c7; color: #92400e; }
-    .pill.optional { background: #dbeafe; color: #1e40af; }
-    .status { color: white; }
-    .status.green { background: var(--green); }
-    .status.yellow { background: var(--yellow); }
-    .status.red { background: var(--red); }
-    .soft { background: var(--soft); border-radius: 16px; padding: 12px; }
-    .workout { border: 1px solid var(--border); border-radius: 18px; padding: 14px; background: white; }
-    .workout.done { opacity: .66; background: #f8fafc; }
-    .workout.done .wtitle { text-decoration: line-through; }
-    .wtitle { font-size: 17px; font-weight: 900; margin: 8px 0 4px; }
-    .detail { color: var(--muted); font-size: 14px; }
-    .hidden { display: none !important; }
-    .seg { display: grid; gap: 8px; grid-template-columns: repeat(3, 1fr); }
-    .seg.two { grid-template-columns: repeat(2, 1fr); }
-    .seg.four { grid-template-columns: repeat(4, 1fr); }
-    .choice.active { outline: 2px solid var(--dark); border-color: var(--dark); }
-    select, input, textarea { width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: white; color: var(--text); min-height: 44px; }
-    label { font-size: 13px; font-weight: 800; color: var(--muted); }
-    .field { display: grid; gap: 6px; }
-    .mini { font-size: 13px; }
-    .nav { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,.92); border-top: 1px solid var(--border); backdrop-filter: blur(14px); padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); display: flex; justify-content: center; z-index: 20; }
-    .navinner { width: min(980px, 100%); display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .tab { border: 0; background: transparent; color: var(--muted); border-radius: 14px; padding: 9px 4px; font-weight: 900; font-size: 13px; }
-    .tab.active { background: var(--dark); color: white; }
-    .meter { height: 10px; background: var(--soft); border-radius: 999px; overflow: hidden; }
-    .meter div { height: 100%; background: var(--dark); border-radius: 999px; }
-    .level { border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: white; }
-    .level.current { border-color: var(--dark); box-shadow: inset 0 0 0 1px var(--dark); }
-    .table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .table th, .table td { text-align: left; border-bottom: 1px solid var(--border); padding: 10px 4px; vertical-align: top; }
-    .table th { font-size: 11px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
-    .toast { position: fixed; left: 50%; bottom: calc(88px + env(safe-area-inset-bottom)); transform: translateX(-50%); background: var(--dark); color: white; padding: 10px 14px; border-radius: 999px; font-weight: 800; z-index: 50; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
-    details { border: 1px solid var(--border); border-radius: 16px; padding: 12px; background: white; }
-    summary { cursor: pointer; font-weight: 900; }
-    @media (min-width: 760px) {
-      .desktop-two { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
-      body { padding-bottom: 90px; }
-    }
-    @media (max-width: 520px) {
-      .app { padding: 12px; }
-      .grid.two, .seg.four { grid-template-columns: 1fr 1fr; }
-      .top { align-items: stretch; }
-      .weekbox { min-width: 104px; }
-      .btn { padding-left: 10px; padding-right: 10px; }
-    }
+    :root{--bg:#f7f8fb;--card:#fff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--soft:#f1f5f9;--dark:#111827;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--shadow:0 10px 24px rgba(15,23,42,.08);--radius:20px}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent} html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif} body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+    button,select,input,textarea{font:inherit}.app{max-width:980px;margin:0 auto;padding:16px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}.eyebrow{color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}h1{margin:3px 0 0;font-size:clamp(28px,8vw,44px);letter-spacing:-.05em;line-height:.95}h2{margin:0;font-size:22px;letter-spacing:-.03em}h3{margin:0;font-size:16px}p{margin:0;color:var(--muted);line-height:1.45}.mini{font-size:13px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.stack{display:flex;flex-direction:column;gap:12px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.grid{display:grid;gap:12px}.grid.two{grid-template-columns:1fr 1fr}.muted{color:var(--muted)}
+    .btn{border:1px solid var(--border);background:white;border-radius:16px;padding:12px 14px;min-height:46px;color:var(--text);cursor:pointer;font-weight:800}.btn:active{transform:scale(.99)}.btn.primary{background:var(--dark);color:white;border-color:var(--dark)}.btn.ghost{background:var(--soft);border-color:transparent}.btn.small{min-height:36px;padding:8px 11px;border-radius:12px;font-size:13px}.btn.green{background:#dcfce7;border-color:#bbf7d0;color:#14532d}.btn.yellow{background:#fef3c7;border-color:#fde68a;color:#713f12}.btn.red{background:#fee2e2;border-color:#fecaca;color:#7f1d1d}
+    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900;background:var(--soft);color:var(--text);white-space:nowrap}.critical{background:#fee2e2!important;color:#991b1b!important}.important{background:#fef3c7!important;color:#92400e!important}.optional{background:#dbeafe!important;color:#1e40af!important}.status{color:white!important}.status.green{background:var(--green)!important}.status.yellow{background:var(--yellow)!important}.status.red{background:var(--red)!important}.soft{background:var(--soft);border-radius:16px;padding:12px}.workout{border:1px solid var(--border);border-radius:18px;padding:14px;background:white}.workout.done{opacity:.66;background:#f8fafc}.workout.done .wtitle{text-decoration:line-through}.wtitle{font-size:17px;font-weight:900;margin:8px 0 4px}.detail{color:var(--muted);font-size:14px}.seg{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}.seg.two{grid-template-columns:repeat(2,1fr)}.seg.four{grid-template-columns:repeat(4,1fr)}.choice.active{outline:2px solid var(--dark);border-color:var(--dark)}
+    select,input,textarea{width:100%;border:1px solid var(--border);border-radius:14px;padding:12px;background:white;color:var(--text);min-height:44px}textarea{min-height:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}label{font-size:13px;font-weight:800;color:var(--muted)}.field{display:grid;gap:6px}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);border-top:1px solid var(--border);backdrop-filter:blur(14px);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:20}.navinner{width:min(980px,100%);display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.tab{border:0;background:transparent;color:var(--muted);border-radius:14px;padding:9px 4px;font-weight:900;font-size:12px}.tab.active{background:var(--dark);color:white}.meter{height:10px;background:var(--soft);border-radius:999px;overflow:hidden}.meter div{height:100%;background:var(--dark);border-radius:999px}.level{border:1px solid var(--border);border-radius:16px;padding:14px;background:white}.level.current{border-color:var(--dark);box-shadow:inset 0 0 0 1px var(--dark)}details{border:1px solid var(--border);border-radius:16px;padding:12px;background:white}summary{cursor:pointer;font-weight:900}.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--dark);color:white;padding:10px 14px;border-radius:999px;font-weight:800;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+    @media(max-width:520px){.app{padding:12px}.grid.two,.seg.four{grid-template-columns:1fr 1fr}.top{align-items:stretch}.weekbox{min-width:112px}.btn{padding-left:10px;padding-right:10px}.navinner{grid-template-columns:repeat(6,1fr)}}
   </style>
 </head>
 <body>
   <div class="app">
     <div class="top">
       <div>
-        <div class="eyebrow">70.3 Readiness OS</div>
-        <h1>Today first.</h1>
-        <p class="mini">Low-friction plan for swim/bike build + BJJ + lifting.</p>
+        <div class="eyebrow">70.3 Readiness OS v2.3</div>
+        <h1 id="title">Today first.</h1>
+        <p class="mini" id="subtitle">Low-friction plan for swim/bike build + BJJ + lifting.</p>
       </div>
       <div class="card weekbox" style="box-shadow:none;padding:10px;min-width:118px;">
         <label>Week</label>
         <select id="weekSelect"></select>
       </div>
     </div>
-
     <main id="screen"></main>
   </div>
-
-  <div class="nav">
-    <div class="navinner">
-      <button class="tab active" data-tab="today">Today</button>
-      <button class="tab" data-tab="week">Week</button>
-      <button class="tab" data-tab="swim">Swim</button>
-      <button class="tab" data-tab="ready">Ready</button>
-    </div>
-  </div>
+  <div class="nav"><div class="navinner">
+    <button class="tab active" data-tab="today">Today</button>
+    <button class="tab" data-tab="week">Week</button>
+    <button class="tab" data-tab="swim">Swim</button>
+    <button class="tab" data-tab="ready">Ready</button>
+    <button class="tab" data-tab="adjust">Adjust</button><button class="tab" data-tab="settings">Settings</button>
+  </div></div>
   <div id="toast" class="toast">Saved</div>
 
 <script>
-const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const PLAN = [
-  {week:1, phase:"Base", goal:"Calm pool reps and basic bike consistency.", days:{
-    Monday:[w("Swim 500 yd","Critical","swim","500 yd broken into 25s. Minimum: 300 yd calm 25s."), w("Lift full body","Important","lift","Moderate, no failure. Minimum: 20 min.")],
-    Tuesday:[w("BJJ double","Optional","bjj","Technique + controlled rolls. Minimum: one class.")],
-    Wednesday:[w("Bike 45 min","Important","bike","Easy Zone 2. Practice drinking/clipping. Minimum: 25 min."), w("BJJ","Optional","bjj","Moderate. Technique only if tired.")],
-    Thursday:[w("Swim 600 yd + run 40 min","Critical","swim","Prioritize swim. Run easy. Minimum: 400 yd swim.")],
-    Friday:[w("Lift or rest","Optional","lift","Rest is acceptable.")],
-    Saturday:[w("Long bike 75–90 min + brick 10 min","Critical","longbike","Most important day. Minimum: 60 min bike.")],
-    Sunday:[w("Run 60 min + easy swim","Important","run","Easy. Swim is optional recovery.")]
-  }},
-  {week:2, phase:"Base", goal:"Build repeat 25s/50s and ride 90 minutes.", days:{
-    Monday:[w("Swim 600–800 yd","Critical","swim","Mostly 25s, some 50s. Minimum: 400 yd."), w("Lift full body","Important","lift","Moderate.")],
-    Tuesday:[w("BJJ double","Optional","bjj","Controlled rolling.")],
-    Wednesday:[w("Bike 50–60 min","Important","bike","Easy with 4 x 3 min steady."), w("BJJ","Optional","bjj","Technique emphasis.")],
-    Thursday:[w("Swim 800–1,000 yd + run 45 min","Critical","swim","Try 4–6 x 50 if calm. Minimum: 500 yd swim.")],
-    Friday:[w("Lift + optional bike 30 min","Optional","lift","Skip bike if tired.")],
-    Saturday:[w("Long bike 90 min + brick 10–15 min","Critical","longbike","Practice one bottle and light carbs.")],
-    Sunday:[w("Run 65–70 min + swim 600 yd","Important","run","Easy.")]
-  }},
-  {week:3, phase:"Base", goal:"More 50s; first 100s only if calm.", days:{
-    Monday:[w("Swim 800–1,000 yd","Critical","swim","Try 8 x 50 if ready."), w("Lift full body","Important","lift","Moderate.")],
-    Tuesday:[w("BJJ double","Optional","bjj","No tournament rounds.")],
-    Wednesday:[w("Bike 60 min","Important","bike","Zone 2 with 4 x 5 min steady."), w("BJJ","Optional","bjj","Moderate.")],
-    Thursday:[w("Swim 1,000–1,200 yd + run 45–50 min","Critical","swim","Add 2–4 x 100 only if 50s calm.")],
-    Friday:[w("Lift + optional bike 35 min","Optional","lift","No heavy legs.")],
-    Saturday:[w("Long bike 1 hr 45 + brick 15 min","Critical","longbike","Practice drinking while moving.")],
-    Sunday:[w("Run 70–75 min + swim 800 yd","Important","run","Easy.")]
-  }},
-  {week:4, phase:"Checkpoint", goal:"Confirm 1,000 yd swim total and 2 hr ride.", days:{
-    Monday:[w("Swim 1,000–1,200 yd","Critical","swim","Controlled repeats."), w("Lift full body","Important","lift","Moderate.")],
-    Tuesday:[w("BJJ double light","Optional","bjj","Controlled only.")],
-    Wednesday:[w("Bike 45–60 min","Important","bike","Easy/steady."), w("BJJ","Optional","bjj","Technique if tired.")],
-    Thursday:[w("Swim 1,200–1,400 yd + run 40–45 min","Critical","swim","No panic; repeat tier if needed.")],
-    Friday:[w("Lift or rest","Optional","lift","Avoid soreness.")],
-    Saturday:[w("Long bike 2 hr + brick 15 min","Critical","longbike","Fuel: 30–45g/hr.")],
-    Sunday:[w("Run 60–70 min + easy swim","Important","run","Cutback run.")]
-  }},
-  {week:5, phase:"Build", goal:"Start real durability and fueling.", days:{
-    Monday:[w("Swim 1,300–1,500 yd","Critical","swim","Aim for repeat 100s."), w("Lift full body","Important","lift","Maintenance.")],
-    Tuesday:[w("BJJ double","Optional","bjj","Controlled rolling.")],
-    Wednesday:[w("Bike 60–70 min","Important","bike","4 x 6 min steady."), w("BJJ","Optional","bjj","Moderate.")],
-    Thursday:[w("Swim 1,500 yd + run 50 min","Critical","swim","Try 3 x 300 or 8 x 100.")],
-    Friday:[w("Lift + bike 35–45 min easy","Optional","lift","Skip bike if tired.")],
-    Saturday:[w("Long bike 2 hr 15 + brick 15–20 min","Critical","longbike","Fuel: 45–60g/hr.")],
-    Sunday:[w("Run 75–80 min + easy swim","Important","run","Easy.")]
-  }},
-  {week:6, phase:"Build", goal:"Increase long bike and swim volume.", days:{
-    Monday:[w("Swim 1,400–1,600 yd","Critical","swim","100s should feel controlled."), w("Lift full body","Important","lift","Maintenance.")],
-    Tuesday:[w("BJJ double","Optional","bjj","No war rounds.")],
-    Wednesday:[w("Bike 70–75 min","Important","bike","Steady intervals or Zone 2."), w("BJJ","Optional","bjj","Technique if shoulders sore.")],
-    Thursday:[w("Swim 1,600–1,800 yd + run 50–55 min","Critical","swim","Build toward 3 x 300.")],
-    Friday:[w("Lift or easy bike 40 min","Optional","lift","Only if fresh.")],
-    Saturday:[w("Long bike 2 hr 30–45 + brick 20 min","Critical","longbike","Fuel: 45–60g/hr.")],
-    Sunday:[w("Run 80–90 min + easy swim","Important","run","Easy.")]
-  }},
-  {week:7, phase:"Build", goal:"First 3-hour ride. BJJ must stay controlled.", days:{
-    Monday:[w("Swim 1,600–1,800 yd","Critical","swim","Use 300 blocks if ready."), w("Lift full body","Important","lift","Maintenance.")],
-    Tuesday:[w("BJJ double controlled","Optional","bjj","One class if fatigue high.")],
-    Wednesday:[w("Bike 75 min","Important","bike","Zone 2 / light tempo."), w("BJJ","Optional","bjj","Light/moderate.")],
-    Thursday:[w("Swim 1,800–2,000 yd + run 45–55 min","Critical","swim","Could be 3 x 300 or 4 x 300.")],
-    Friday:[w("Lift + optional bike 30 min","Optional","lift","Very light.")],
-    Saturday:[w("Long bike 3 hr + brick 20–25 min","Critical","longbike","Fuel: 60g/hr target.")],
-    Sunday:[w("Run 75–85 min + easy swim","Important","run","Controlled.")]
-  }},
-  {week:8, phase:"Checkpoint", goal:"Cut back and evaluate swim/bike readiness.", days:{
-    Monday:[w("Swim 1,400–1,600 yd","Critical","swim","Technique reset."), w("Lift full body","Important","lift","Light/moderate.")],
-    Tuesday:[w("BJJ double light","Optional","bjj","Technical only if tired.")],
-    Wednesday:[w("Bike 50–60 min","Important","bike","Easy."), w("BJJ","Optional","bjj","Technique.")],
-    Thursday:[w("Swim 1,500–1,700 yd + run 40–45 min","Critical","swim","Controlled repeats.")],
-    Friday:[w("Lift or rest","Optional","lift","Rest encouraged if beat up.")],
-    Saturday:[w("Long bike 2 hr 15 + brick 15 min","Critical","longbike","Cutback but still fuel.")],
-    Sunday:[w("Run 65–75 min + easy swim","Important","run","Easy.")]
-  }},
-  {week:9, phase:"Peak", goal:"Race-specific confidence; open water if possible.", days:{
-    Monday:[w("Swim 1,800–2,000 yd","Critical","swim","3 x 500 if ready."), w("Lift light","Optional","lift","Maintenance only.")],
-    Tuesday:[w("BJJ double controlled","Optional","bjj","No death rounds.")],
-    Wednesday:[w("Bike 75 min","Important","bike","Race-effort blocks."), w("BJJ light","Optional","bjj","Technical only.")],
-    Thursday:[w("Swim 2,000–2,300 yd + run 50 min","Critical","swim","Race-distance total is the goal.")],
-    Friday:[w("Lift light or rest","Optional","lift","Rest is fine.")],
-    Saturday:[w("Long bike 3 hr 30 + brick 25–30 min","Critical","longbike","Fuel: 60–75g/hr. Race setup.")],
-    Sunday:[w("Run 90–100 min + easy swim","Important","run","Do not race the run.")]
-  }},
-  {week:10, phase:"Peak", goal:"Biggest race-specific week.", days:{
-    Monday:[w("Swim 1,900–2,200 yd","Critical","swim","3 x 500 or 1,500 continuous attempt."), w("Lift light","Optional","lift","Short maintenance.")],
-    Tuesday:[w("BJJ double light/moderate","Optional","bjj","Controlled only.")],
-    Wednesday:[w("Bike 60–75 min","Important","bike","Steady, not crushing."), w("BJJ light","Optional","bjj","Technique only.")],
-    Thursday:[w("Swim 2,200–2,400 yd + run 45–50 min","Critical","swim","Race-distance total." )],
-    Friday:[w("Rest or short lift","Optional","lift","Rest preferred.")],
-    Saturday:[w("Long bike 3 hr 45–4 hr + brick 30 min","Critical","longbike","Fuel: 60–90g/hr. Race rehearsal.")],
-    Sunday:[w("Run 80–90 min + easy swim","Important","run","Easy only.")]
-  }},
-  {week:11, phase:"Taper", goal:"Reduce volume and avoid hard BJJ.", days:{
-    Monday:[w("Swim 1,500–1,700 yd","Critical","swim","Smooth."), w("Lift light","Optional","lift","Short maintenance.")],
-    Tuesday:[w("BJJ technique only","Optional","bjj","No hard rolling.")],
-    Wednesday:[w("Bike 60 min","Important","bike","Easy with short pickups."), w("Optional BJJ light","Optional","bjj","Technique only.")],
-    Thursday:[w("Swim 1,600–1,800 yd + run 40 min","Critical","swim","Easy/steady.")],
-    Friday:[w("Rest","Important","rest","Absorb training.")],
-    Saturday:[w("Bike 2.5–3 hr + brick 15 min","Critical","longbike","Final longer rhythm ride.")],
-    Sunday:[w("Run 60–70 min + easy swim","Important","run","Easy.")]
-  }},
-  {week:12, phase:"Race Week", goal:"Stay sharp, rested, and calm.", days:{
-    Monday:[w("Swim 1,000–1,200 yd easy","Critical","swim","Smooth only.")],
-    Tuesday:[w("Skip BJJ or technique only","Optional","bjj","Best choice: skip.")],
-    Wednesday:[w("Bike 40–50 min easy","Important","bike","Light spin.")],
-    Thursday:[w("Swim 800–1,000 yd + run 25–35 min","Important","swim","Short and relaxed.")],
-    Friday:[w("Rest","Critical","rest","No new work.")],
-    Saturday:[w("Short shakeout or rest","Important","rest","Check gear.")],
-    Sunday:[w("Race / final prep","Critical","race","Execute calmly.")]
-  }}
+const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const PLAN=[
+{week:1,phase:"Base",goal:"Calm pool reps and basic bike consistency.",days:{Monday:[w("Swim 500 yd","Critical","swim","500 yd broken into 25s. Minimum: 300 yd calm 25s."),w("Lift full body","Important","lift","Moderate, no failure.")],Tuesday:[w("BJJ double","Optional","bjj","Technique + controlled rolls. Minimum: one class.")],Wednesday:[w("Bike 45 min","Important","bike","Easy Zone 2. Practice drinking/clipping."),w("BJJ","Optional","bjj","Moderate. Technique only if tired.")],Thursday:[w("Swim 600 yd + run 40 min","Critical","swim","Prioritize swim. Run easy. Minimum: 400 yd swim.")],Friday:[w("Lift or rest","Optional","lift","Rest is acceptable.")],Saturday:[w("Long bike 75–90 min + brick 10 min","Critical","longbike","Most important day. Minimum: 60 min bike.")],Sunday:[w("Run 60 min + easy swim","Important","run","Easy. Swim is optional recovery.")]}},
+{week:2,phase:"Base",goal:"Build repeat 25s/50s and ride 90 minutes.",days:{Monday:[w("Swim 600–800 yd","Critical","swim","Mostly 25s, some 50s."),w("Lift full body","Important","lift","Moderate.")],Tuesday:[w("BJJ double","Optional","bjj","Controlled rolling.")],Wednesday:[w("Bike 50–60 min","Important","bike","Easy with 4 x 3 min steady."),w("BJJ","Optional","bjj","Technique emphasis.")],Thursday:[w("Swim 800–1,000 yd + run 45 min","Critical","swim","Try 4–6 x 50 if calm.")],Friday:[w("Lift + optional bike 30 min","Optional","lift","Skip bike if tired.")],Saturday:[w("Long bike 90 min + brick 10–15 min","Critical","longbike","Practice one bottle and light carbs.")],Sunday:[w("Run 65–70 min + swim 600 yd","Important","run","Easy.")]}},
+{week:3,phase:"Base",goal:"More 50s; first 100s only if calm.",days:{Monday:[w("Swim 800–1,000 yd","Critical","swim","Try 8 x 50 if ready."),w("Lift full body","Important","lift","Moderate.")],Tuesday:[w("BJJ double","Optional","bjj","No tournament rounds.")],Wednesday:[w("Bike 60 min","Important","bike","Zone 2 with 4 x 5 min steady."),w("BJJ","Optional","bjj","Moderate.")],Thursday:[w("Swim 1,000–1,200 yd + run 45–50 min","Critical","swim","Add 2–4 x 100 only if 50s calm.")],Friday:[w("Lift + optional bike 35 min","Optional","lift","No heavy legs.")],Saturday:[w("Long bike 1 hr 45 + brick 15 min","Critical","longbike","Practice drinking while moving.")],Sunday:[w("Run 70–75 min + swim 800 yd","Important","run","Easy.")]}},
+{week:4,phase:"Checkpoint",goal:"Confirm 1,000 yd swim total and 2 hr ride.",days:{Monday:[w("Swim 1,000–1,200 yd","Critical","swim","Controlled repeats."),w("Lift full body","Important","lift","Moderate.")],Tuesday:[w("BJJ double light","Optional","bjj","Controlled only.")],Wednesday:[w("Bike 45–60 min","Important","bike","Easy/steady."),w("BJJ","Optional","bjj","Technique if tired.")],Thursday:[w("Swim 1,200–1,400 yd + run 40–45 min","Critical","swim","No panic; repeat tier if needed.")],Friday:[w("Lift or rest","Optional","lift","Avoid soreness.")],Saturday:[w("Long bike 2 hr + brick 15 min","Critical","longbike","Fuel: 30–45g/hr.")],Sunday:[w("Run 60–70 min + easy swim","Important","run","Cutback run.")]}},
+{week:5,phase:"Build",goal:"Start real durability and fueling.",days:{Monday:[w("Swim 1,300–1,500 yd","Critical","swim","Aim for repeat 100s."),w("Lift full body","Important","lift","Maintenance.")],Tuesday:[w("BJJ double","Optional","bjj","Controlled rolling.")],Wednesday:[w("Bike 60–70 min","Important","bike","4 x 6 min steady."),w("BJJ","Optional","bjj","Moderate.")],Thursday:[w("Swim 1,500 yd + run 50 min","Critical","swim","Try 3 x 300 or 8 x 100.")],Friday:[w("Lift + bike 35–45 min easy","Optional","lift","Skip bike if tired.")],Saturday:[w("Long bike 2 hr 15 + brick 15–20 min","Critical","longbike","Fuel: 45–60g/hr.")],Sunday:[w("Run 75–80 min + easy swim","Important","run","Easy.")]}},
+{week:6,phase:"Build",goal:"Increase long bike and swim volume.",days:{Monday:[w("Swim 1,400–1,600 yd","Critical","swim","100s should feel controlled."),w("Lift full body","Important","lift","Maintenance.")],Tuesday:[w("BJJ double","Optional","bjj","No war rounds.")],Wednesday:[w("Bike 70–75 min","Important","bike","Steady intervals or Zone 2."),w("BJJ","Optional","bjj","Technique if shoulders sore.")],Thursday:[w("Swim 1,600–1,800 yd + run 50–55 min","Critical","swim","Build toward 3 x 300.")],Friday:[w("Lift or easy bike 40 min","Optional","lift","Only if fresh.")],Saturday:[w("Long bike 2 hr 30–45 + brick 20 min","Critical","longbike","Fuel: 45–60g/hr.")],Sunday:[w("Run 80–90 min + easy swim","Important","run","Easy.")]}},
+{week:7,phase:"Build",goal:"First 3-hour ride. BJJ must stay controlled.",days:{Monday:[w("Swim 1,600–1,800 yd","Critical","swim","Use 300 blocks if ready."),w("Lift full body","Important","lift","Maintenance.")],Tuesday:[w("BJJ double controlled","Optional","bjj","One class if fatigue high.")],Wednesday:[w("Bike 75 min","Important","bike","Zone 2 / light tempo."),w("BJJ","Optional","bjj","Light/moderate.")],Thursday:[w("Swim 1,800–2,000 yd + run 45–55 min","Critical","swim","Could be 3 x 300 or 4 x 300.")],Friday:[w("Lift + optional bike 30 min","Optional","lift","Very light.")],Saturday:[w("Long bike 3 hr + brick 20–25 min","Critical","longbike","Fuel: 60g/hr target.")],Sunday:[w("Run 75–85 min + easy swim","Important","run","Controlled.")]}},
+{week:8,phase:"Checkpoint",goal:"Cut back and evaluate swim/bike readiness.",days:{Monday:[w("Swim 1,400–1,600 yd","Critical","swim","Technique reset."),w("Lift full body","Important","lift","Light/moderate.")],Tuesday:[w("BJJ double light","Optional","bjj","Technical only if tired.")],Wednesday:[w("Bike 50–60 min","Important","bike","Easy."),w("BJJ","Optional","bjj","Technique.")],Thursday:[w("Swim 1,500–1,700 yd + run 40–45 min","Critical","swim","Controlled repeats.")],Friday:[w("Lift or rest","Optional","lift","Rest encouraged if beat up.")],Saturday:[w("Long bike 2 hr 15 + brick 15 min","Critical","longbike","Cutback but still fuel.")],Sunday:[w("Run 65–75 min + easy swim","Important","run","Easy.")]}},
+{week:9,phase:"Peak",goal:"Race-specific confidence; open water if possible.",days:{Monday:[w("Swim 1,800–2,000 yd","Critical","swim","3 x 500 if ready."),w("Lift light","Optional","lift","Maintenance only.")],Tuesday:[w("BJJ double controlled","Optional","bjj","No death rounds.")],Wednesday:[w("Bike 75 min","Important","bike","Race-effort blocks."),w("BJJ light","Optional","bjj","Technical only.")],Thursday:[w("Swim 2,000–2,300 yd + run 50 min","Critical","swim","Race-distance total is the goal.")],Friday:[w("Lift light or rest","Optional","lift","Rest is fine.")],Saturday:[w("Long bike 3 hr 30 + brick 25–30 min","Critical","longbike","Fuel: 60–75g/hr. Race setup.")],Sunday:[w("Run 90–100 min + easy swim","Important","run","Do not race the run.")]}},
+{week:10,phase:"Peak",goal:"Biggest race-specific week.",days:{Monday:[w("Swim 1,900–2,200 yd","Critical","swim","3 x 500 or 1,500 continuous attempt."),w("Lift light","Optional","lift","Short maintenance.")],Tuesday:[w("BJJ double light/moderate","Optional","bjj","Controlled only.")],Wednesday:[w("Bike 60–75 min","Important","bike","Steady, not crushing."),w("BJJ light","Optional","bjj","Technique only.")],Thursday:[w("Swim 2,200–2,400 yd + run 45–50 min","Critical","swim","Race-distance total.")],Friday:[w("Rest or short lift","Optional","lift","Rest preferred.")],Saturday:[w("Long bike 3 hr 45–4 hr + brick 30 min","Critical","longbike","Fuel: 60–90g/hr. Race rehearsal.")],Sunday:[w("Run 80–90 min + easy swim","Important","run","Easy only.")]}},
+{week:11,phase:"Taper",goal:"Reduce volume and avoid hard BJJ.",days:{Monday:[w("Swim 1,500–1,700 yd","Critical","swim","Smooth."),w("Lift light","Optional","lift","Short maintenance.")],Tuesday:[w("BJJ technique only","Optional","bjj","No hard rolling.")],Wednesday:[w("Bike 60 min","Important","bike","Easy with short pickups."),w("Optional BJJ light","Optional","bjj","Technique only.")],Thursday:[w("Swim 1,600–1,800 yd + run 40 min","Critical","swim","Easy/steady.")],Friday:[w("Rest","Important","rest","Absorb training.")],Saturday:[w("Bike 2.5–3 hr + brick 15 min","Critical","longbike","Final longer rhythm ride.")],Sunday:[w("Run 60–70 min + easy swim","Important","run","Easy.")]}},
+{week:12,phase:"Race Week",goal:"Stay sharp, rested, and calm.",days:{Monday:[w("Swim 1,000–1,200 yd easy","Critical","swim","Smooth only.")],Tuesday:[w("Skip BJJ or technique only","Optional","bjj","Best choice: skip.")],Wednesday:[w("Bike 40–50 min easy","Important","bike","Light spin.")],Thursday:[w("Swim 800–1,000 yd + run 25–35 min","Important","swim","Short and relaxed.")],Friday:[w("Rest","Critical","rest","No new work.")],Saturday:[w("Short shakeout or rest","Important","rest","Check gear.")],Sunday:[w("Race / final prep","Critical","race","Execute calmly.")]}},
 ];
-function w(title, priority, type, desc) { return {title, priority, type, desc}; }
+function w(title,priority,type,desc){return{title,priority,type,desc}}
+const SWIM=[["Calm 25s","Repeat 25 yd without panic.","12 x 25 controlled"],["Calm 50s","Repeat 50 yd with controlled breathing.","8 x 50 controlled"],["First 100s","Controlled 100 yd repeats.","4 x 100 controlled"],["300 blocks","Build steady 300 yd blocks.","3 x 300 controlled"],["500 blocks","Race-useful blocks.","3 x 500 controlled"],["Pool race-ready","Pool confidence.","1,500 continuous or 2,000+ total"],["Open-water ready","Race-specific calm.","30–40 min open water calm"]];
 
-const SWIM_LEVELS = [
-  ["Calm 25s", "Repeat 25 yd without panic.", "12 x 25 controlled"],
-  ["Calm 50s", "Repeat 50 yd with controlled breathing.", "8 x 50 controlled"],
-  ["First 100s", "Controlled 100 yd repeats.", "4 x 100 controlled"],
-  ["300 blocks", "Build steady 300 yd blocks.", "3 x 300 controlled"],
-  ["500 blocks", "Race-useful blocks.", "3 x 500 controlled"],
-  ["Pool race-ready", "Pool confidence.", "1,500 continuous or 2,000+ total"],
-  ["Open-water ready", "Race-specific calm.", "30–40 min open water calm"]
-];
+const defaultState={tab:"today",startDate:"2026-07-07",raceDate:"2026-09-30",autoSchedule:true,manualWeek:1,day:todayName(),feel:null,limiter:null,bjjPattern:"tuewed",done:{},adjustments:[],equipment:{},swimLevel:1,swimHistory:[],ready:{swim:"red",bike:"red",brick:"red",run:"green",fueling:"red",openwater:"red",bjj:"yellow"},logs:[]};
+let state=load();
+function load(){try{return{...defaultState,...JSON.parse(localStorage.getItem("tri703mobilev2")||"{}")}}catch{return{...defaultState}}}
+function save(){localStorage.setItem("tri703mobilev2",JSON.stringify(state))}
+function todayName(){return["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()]}
+function $(s){return document.querySelector(s)}
+function toast(msg="Saved"){const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),900)}
+function dateOnly(d){return new Date(d+"T00:00:00")}
+function daysSinceStart(){return Math.floor((new Date().setHours(0,0,0,0)-dateOnly(state.startDate).getTime())/86400000)}
+function isPreseason(){return state.autoSchedule && daysSinceStart()<0}
+function currentWeek(){if(!state.autoSchedule)return state.manualWeek; const ds=daysSinceStart(); if(ds<0)return 1; return Math.min(12,Math.floor(ds/7)+1)}
+function currentDay(){if(state.autoSchedule&&!isPreseason())return todayName(); return state.day}
+function planWeek(){return PLAN.find(p=>p.week==currentWeek())||PLAN[0]}
+function dayWorkouts(){const p=planWeek(),d=currentDay();return p.days[d]||p.days.Monday}
+function init(){document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;save();render()});render(); if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js").catch(()=>{})}}
+function syncShell(){const p=planWeek(); $("#weekSelect").innerHTML=PLAN.map(x=>`<option value="${x.week}" ${x.week==currentWeek()?"selected":""}>W${x.week}</option>`).join(""); $("#weekSelect").disabled=state.autoSchedule; $("#weekSelect").onchange=e=>{state.manualWeek=+e.target.value;save();render()}; document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===state.tab)); $("#title").textContent=isPreseason()?"Preseason mode.":"Today first."; $("#subtitle").textContent=isPreseason()?`12-week build starts ${fmt(state.startDate)}. Browse now; tracking is optional.`:"Low-friction plan for swim/bike build + BJJ + lifting."}
+function fmt(s){const d=dateOnly(s); return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}
+function render(){syncShell(); if(state.tab==="today")renderToday(); if(state.tab==="week")renderWeek(); if(state.tab==="swim")renderSwim(); if(state.tab==="ready")renderReady(); if(state.tab==="adjust")renderAdjust(); if(state.tab==="settings")renderSettings(); save()}
+function preseasonCard(){const left=Math.abs(daysSinceStart());return `<section class="card stack"><div><div class="eyebrow">Preseason</div><h2>${left} days until Week 1</h2><p>Use this period to build base without tracking pressure. Week 1 starts ${fmt(state.startDate)}.</p></div><div class="soft"><strong>Preseason priorities:</strong><br>1–2 easy bikes/week, 2–3 swims/week focused on calm breathing, normal BJJ/lifting if you want, and no guilt for vacation gaps.</div><div class="grid two"><button class="btn primary" id="previewWeek1">Preview Week 1</button><button class="btn ghost" id="startNow">Start tracking now</button></div></section>`}
+function decision(){if(isPreseason())return["yellow","Preseason: no required tracking. Do easy base work only."]; if(state.feel==="red")return["red","Critical only or rest. Skip optional work."]; if(state.feel==="yellow")return["yellow","Use minimum versions. Keep critical swim/bike if possible."]; if(state.limiter&&state.limiter!=="none")return["yellow",`Limiter: ${state.limiter}. Use minimums for affected sessions.`]; if(state.feel==="green")return["green","Full plan is reasonable."]; return["yellow","Tap Green / Yellow / Red to get an adjusted plan."]}
+function renderToday(){const p=planWeek(),day=currentDay(),[dc,dt]=decision(); $("#screen").innerHTML=`<div class="stack">${isPreseason()?preseasonCard():""}<section class="card stack"><div class="row"><div><div class="eyebrow">Week ${p.week} · ${p.phase}</div><h2>${day}</h2><p>${p.goal}</p></div><select id="daySelect" style="max-width:140px" ${state.autoSchedule&&!isPreseason()?"disabled":""}>${DAYS.map(d=>`<option ${d===day?"selected":""}>${d}</option>`).join("")}</select></div><div><h3>How are you today?</h3><div class="seg" style="margin-top:8px;">${choice("feel","green","Green","green")}${choice("feel","yellow","Yellow","yellow")}${choice("feel","red","Red","red")}</div></div><details><summary>Optional: add limiter</summary><div class="stack" style="margin-top:12px;"><label>Main limiter</label><div class="seg four">${choice("limiter","none","None","")}${choice("limiter","shoulders","Shoulders","")}${choice("limiter","legs","Legs","")}${choice("limiter","time","Time","")}</div><div class="seg two">${choice("limiter","general fatigue","General fatigue","")}${choice("limiter","neck/back","Neck/back","")}</div></div></details><div class="soft"><span class="pill status ${dc}">${dc.toUpperCase()}</span> <strong>${dt}</strong></div></section><section class="stack">${dayWorkouts().map((x,i)=>renderWorkout(x,i)).join("")}</section></div>`; 
+$("#daySelect").onchange=e=>{state.day=e.target.value;save();render()}; const pw=$("#previewWeek1"); if(pw)pw.onclick=()=>{state.tab="week";save();render()}; const sn=$("#startNow"); if(sn)sn.onclick=()=>{state.autoSchedule=false;state.manualWeek=1;toast("Manual Week 1 enabled");render()}; bindChoices(); bindWorkoutActions()}
+function choice(field,value,label,color){const active=state[field]===value||(value===null&&!state[field]);return`<button class="btn choice ${color||""} ${active?"active":""}" data-field="${field}" data-value="${value??""}">${label}</button>`}
+function bindChoices(){document.querySelectorAll("[data-field]").forEach(b=>b.onclick=()=>{state[b.dataset.field]=b.dataset.value||null;save();render()})}
+function keyFor(i){return`w${currentWeek()}-${currentDay()}-${i}`}
+function renderWorkout(w,i){const key=keyFor(i),d=state.done[key]?.status,adj=adjustment(w);return`<div class="workout ${d==="done"?"done":""}"><div class="row"><span class="pill ${w.priority.toLowerCase()}">${w.priority}</span><span class="pill">${w.type}</span></div><div class="wtitle">${w.title}</div><div class="detail">${w.desc}</div>${adj?`<div class="soft mini" style="margin-top:10px"><strong>Adjustment:</strong> ${adj}</div>`:""}<div class="seg" style="margin-top:12px"><button class="btn green" data-action="done" data-i="${i}">Done</button><button class="btn yellow" data-action="partial" data-i="${i}">Partial</button><button class="btn red" data-action="skipped" data-i="${i}">Skipped</button></div><button class="btn ghost" style="margin-top:8px;width:100%" data-move="${i}">Move / Adjust</button>${state.done[key]?postPrompt(w,i):""}</div>`}
+function adjustment(w){if(isPreseason())return"Optional preseason tracking only."; if(state.feel==="red"&&w.priority!=="Critical")return"Skip today."; if(state.feel==="red"&&w.priority==="Critical")return"Minimum version only."; if(state.feel==="yellow"&&w.priority==="Optional")return"Optional: skip or keep technique-only."; if(state.limiter==="shoulders"&&["swim","bjj"].includes(w.type))return"Technique-only; no hard pulling/rolling."; if(state.limiter==="legs"&&["bike","longbike","run","bjj"].includes(w.type))return"Use minimum / Zone 2."; if(state.limiter==="time")return"Use the minimum version."; return""}
+function bindWorkoutActions(){document.querySelectorAll("[data-action]").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,k=keyFor(i),w=dayWorkouts()[i];state.done[k]={status:b.dataset.action,type:w.type,title:w.title,ts:new Date().toISOString()};save();toast();render()});document.querySelectorAll("[data-post]").forEach(b=>b.onclick=()=>handlePost(b.dataset.post,+b.dataset.i,b.dataset.value));document.querySelectorAll("[data-move]").forEach(b=>b.onclick=()=>{state.tab="adjust";state.adjustWorkoutIndex=+b.dataset.move;save();render()})}
+function postPrompt(w,i){if(w.type==="swim")return`<div class="soft stack" style="margin-top:12px"><strong>Swim check</strong><div class="seg"><button class="btn green" data-post="swimfeel" data-i="${i}" data-value="controlled">Controlled</button><button class="btn yellow" data-post="swimfeel" data-i="${i}" data-value="hard">Hard OK</button><button class="btn red" data-post="swimfeel" data-i="${i}" data-value="panic">Panic/bad</button></div></div>`;if(w.type==="longbike")return`<div class="soft stack" style="margin-top:12px"><strong>Long bike check</strong><div class="soft mini"><strong>Fuel target:</strong> ${longBikeFuelTarget()}</div><div class="seg"><button class="btn green" data-post="fuel" data-i="${i}" data-value="good">Fuel good</button><button class="btn yellow" data-post="fuel" data-i="${i}" data-value="okay">Fuel okay</button><button class="btn red" data-post="fuel" data-i="${i}" data-value="bad">Fuel bad</button></div><div class="seg two"><button class="btn green" data-post="brick" data-i="${i}" data-value="yes">Brick done</button><button class="btn yellow" data-post="brick" data-i="${i}" data-value="no">No brick</button></div></div>`;if(w.type==="bjj")return`<div class="soft stack" style="margin-top:12px"><strong>BJJ check</strong><div class="seg"><button class="btn green" data-post="bjj" data-i="${i}" data-value="light">Light</button><button class="btn yellow" data-post="bjj" data-i="${i}" data-value="moderate">Moderate</button><button class="btn red" data-post="bjj" data-i="${i}" data-value="hard">Hard</button></div><details><summary>Optional damage</summary><div class="seg four" style="margin-top:8px">${["none","shoulders","legs","neck/back"].map(x=>`<button class="btn small" data-post="damage" data-i="${i}" data-value="${x}">${x}</button>`).join("")}</div></details></div>`;return""}
+function setSwimLevel(next,reason="manual"){const prev=state.swimLevel;next=Math.max(1,Math.min(7,next));if(next!==prev){state.swimHistory=state.swimHistory||[];state.swimHistory.push({prev,next,reason,ts:new Date().toISOString()});state.swimLevel=next;}}
+function undoSwimLevel(){state.swimHistory=state.swimHistory||[];const last=state.swimHistory.pop();if(last){state.swimLevel=last.prev;save();toast("Swim change undone");render();}else toast("Nothing to undo");}
+function handlePost(t,i,v){const k=keyFor(i),obj=state.done[k]||{};obj[t]=v;state.done[k]=obj;if(t==="swimfeel"){if(v==="controlled"&&state.swimLevel<7){setSwimLevel(state.swimLevel+1,"post-swim controlled");toast("Swim level progressed")}else if(v==="panic"&&state.swimLevel>1){setSwimLevel(state.swimLevel-1,"post-swim panic");toast("Swim level reduced")}else toast("Repeat swim level")} if(t==="fuel"){state.ready.fueling=v==="good"?"green":v==="okay"?"yellow":"red";toast("Fueling updated")} if(t==="brick"&&v==="yes"){state.ready.brick=state.ready.brick==="red"?"yellow":"green";toast("Brick updated")} if(t==="bjj"&&v==="hard"){state.feel=state.feel==="green"?"yellow":state.feel;state.ready.bjj="yellow";toast("Tomorrow: reduce intensity")} if(t==="damage"&&v!=="none"){state.limiter=v;state.ready.bjj="yellow";toast("Limiter set")} save();render()}
+function renderWeek(){const p=planWeek();$("#screen").innerHTML=`<div class="stack">${isPreseason()?preseasonCard():""}<section class="card stack"><div class="row"><div><div class="eyebrow">Week ${p.week}</div><h2>${p.phase}</h2><p>${p.goal}</p></div><button class="btn small" id="resetWeek">Reset</button></div><p class="mini">Do not chase 100%. Protect critical swim, long bike, and brick.</p></section><section class="card stack"><h2>Weekly anchors</h2>${anchorStatusHtml()}</section>${DAYS.filter(d=>p.days[d]).map(day=>`<section class="card stack"><h3>${day}</h3>${p.days[day].map((w,i)=>{const s=state.done[`w${p.week}-${day}-${i}`]?.status;return`<div class="row soft"><div><span class="pill ${w.priority.toLowerCase()}">${w.priority}</span><div style="margin-top:5px"><strong>${w.title}</strong></div><div class="mini muted">${w.desc}</div></div><span class="pill">${s||"open"}</span></div>`}).join("")}</section>`).join("")}</div>`;$("#resetWeek").onclick=()=>{Object.keys(state.done).forEach(k=>{if(k.startsWith(`w${currentWeek()}-`))delete state.done[k]});save();render()}; const pw=$("#previewWeek1"); if(pw)pw.onclick=()=>{state.tab="week";save();render()}; const sn=$("#startNow"); if(sn)sn.onclick=()=>{state.autoSchedule=false;state.manualWeek=1;toast("Manual Week 1 enabled");render()}}
+function renderSwim(){ $("#screen").innerHTML=`<div class="stack"><section class="card stack"><div><div class="eyebrow">Current swim level</div><h2>Level ${state.swimLevel}: ${SWIM[state.swimLevel-1][0]}</h2><p>${SWIM[state.swimLevel-1][1]}</p></div><div class="seg"><button class="btn green" id="swimUp">Progress</button><button class="btn yellow" id="swimSame">Repeat</button><button class="btn red" id="swimDown">Reduce</button></div><div class="seg two"><button class="btn ghost" id="swimUndo">Undo last swim change</button><button class="btn ghost" id="swimReset">Reset to Level 1</button></div><details><summary>Set swim level manually</summary><div class="stack" style="margin-top:12px"><select id="manualSwimLevel">${SWIM.map((l,idx)=>`<option value="${idx+1}" ${idx+1===state.swimLevel?"selected":""}>Level ${idx+1}: ${l[0]}</option>`).join("")}</select><button class="btn primary" id="applySwimLevel">Apply level</button></div></details><p class="mini">Progress only when breathing is controlled and the set feels like practice, not survival. Undo is available if you tap the wrong button.</p></section>${SWIM.map((l,idx)=>`<section class="level ${idx+1===state.swimLevel?"current":""}"><div class="row"><strong>Level ${idx+1}: ${l[0]}</strong>${idx+1===state.swimLevel?'<span class="pill">Current</span>':""}</div><p style="margin-top:6px">${l[1]}</p><div class="soft mini" style="margin-top:8px"><strong>Unlock:</strong> ${l[2]}</div></section>`).join("")}<section class="card stack"><h2>Today’s swim set</h2><div class="soft"><strong>${swimWorkoutForLevel()[0]}</strong><pre style="white-space:pre-wrap;margin:8px 0 0;font-family:inherit;color:var(--muted)">${swimWorkoutForLevel()[1]}</pre></div></section><section class="card stack"><h2>Starter sets</h2><div class="soft"><strong>500 yd:</strong> 4x25 warmup, 4x25 drill, 8x25 main, 4x25 cooldown.</div><div class="soft"><strong>800 yd:</strong> 4x25 warmup, 4x25 drill, 8x25, 4x50, 4x25 easy, 4x25 cooldown.</div><div class="soft"><strong>1,500 yd:</strong> 200 warmup, 6x50 drill, 8x100 main, 200 cooldown.</div></section></div>`; $("#swimUp").onclick=()=>{setSwimLevel(state.swimLevel+1,"manual progress");save();toast("Progressed");render()};$("#swimSame").onclick=()=>toast("Repeat current level");$("#swimDown").onclick=()=>{setSwimLevel(state.swimLevel-1,"manual reduce");save();toast("Reduced");render()};$("#swimUndo").onclick=()=>undoSwimLevel();$("#swimReset").onclick=()=>{setSwimLevel(1,"reset to level 1");save();toast("Swim reset");render()};$("#applySwimLevel").onclick=()=>{setSwimLevel(Number($("#manualSwimLevel").value),"manual set");save();toast("Swim level set");render()}}
+function renderReady(){const items=[["swim","Swim","Green: 1,500 yd continuous or 3 x 500 controlled."],["bike","Bike","Green: 3.5–4 hr long ride or roughly 45–55 mi."],["brick","Brick","Green: 25–30 min run off long bike."],["run","Run","Green: 80–100 min easy long run."],["fueling","Fueling","Green: 60g+ carbs/hr practiced."],["openwater","Open water","Green: 1–2 calm open-water swims."],["bjj","BJJ fatigue","Green: no recurring shoulder/neck/knee issue."]];const score=Math.round(items.reduce((a,[k])=>a+(state.ready[k]==="green"?2:state.ready[k]==="yellow"?1:0),0)/(items.length*2)*100);$("#screen").innerHTML=`<div class="stack"><section class="card stack"><div><div class="eyebrow">Race readiness</div><h2>${score}%</h2><p>Completion is less important than these benchmarks.</p></div><div class="meter"><div style="width:${score}%"></div></div></section>${items.map(([k,n,d])=>`<section class="card stack"><div class="row"><div><h3>${n}</h3><p class="mini">${d}</p></div><span class="pill status ${state.ready[k]}">${state.ready[k].toUpperCase()}</span></div><div class="seg">${["red","yellow","green"].map(s=>`<button class="btn ${s} ${state.ready[k]===s?"active":""}" data-ready="${k}" data-value="${s}">${s}</button>`).join("")}</div></section>`).join("")}<section class="card stack"><h2>Ask ChatGPT handoff</h2><p class="mini">Copies your current app context so you can paste it into ChatGPT.</p><button class="btn primary" id="copyChatContext">Copy ChatGPT context</button><button class="btn ghost" id="openChatGPT">Open ChatGPT</button></section><section class="card stack"><h2>Equipment checklist</h2>${equipmentChecklistHtml()}</section><section class="card stack"><h2>Checkpoint rules</h2><div class="soft"><strong>Week 4:</strong> 1,000 yd swim total, 2 hr ride, 15 min brick.</div><div class="soft"><strong>Week 8:</strong> 1,500–2,000 yd swim total, 3 hr ride, 75–90 min run.</div><div class="soft"><strong>Week 10:</strong> race-distance swim total, 3.5–4 hr ride, 25–30 min brick, fueling practiced.</div></section></div>`;document.querySelectorAll("[data-ready]").forEach(b=>b.onclick=()=>{state.ready[b.dataset.ready]=b.dataset.value;save();render()});
+  document.querySelectorAll("[data-equip]").forEach(c=>c.onchange=()=>{state.equipment=state.equipment||{};state.equipment[c.dataset.equip]=c.checked;save();});
+  const copy=$("#copyChatContext"); if(copy)copy.onclick=async()=>{try{await navigator.clipboard.writeText(askChatContext());toast("Context copied")}catch{toast("Copy failed")}};
+  const open=$("#openChatGPT"); if(open)open.onclick=()=>{window.open("https://chatgpt.com/","_blank")};
+}
+function exportText(){return btoa(unescape(encodeURIComponent(JSON.stringify(state))))}
+function importText(txt){try{const obj=JSON.parse(decodeURIComponent(escape(atob(txt.trim()))));state={...defaultState,...obj};save();toast("Imported");render()}catch(e){toast("Import failed")}}
 
-const defaultState = {
-  tab:"today", week:1, day:todayName(), feel:null, limiter:null, garmin:null,
-  done:{}, swimLevel:1,
-  ready:{swim:"red", bike:"red", brick:"red", run:"green", fueling:"red", openwater:"red", bjj:"yellow"},
-  logs:[]
-};
-let state = load();
-function load(){ try { return {...defaultState, ...JSON.parse(localStorage.getItem("tri703mobile")||"{}")}; } catch { return {...defaultState}; } }
-function save(){ localStorage.setItem("tri703mobile", JSON.stringify(state)); }
-function todayName(){ return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()];}
-function planWeek(){ return PLAN.find(p=>p.week == state.week) || PLAN[0];}
-function $(s){ return document.querySelector(s);}
-function toast(msg="Saved"){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),900);}
-function dayWorkouts(){ const p=planWeek(); return p.days[state.day] ? p.days[state.day] : p.days.Monday; }
-function init(){
-  $("#weekSelect").innerHTML = PLAN.map(p=>`<option value="${p.week}" ${p.week==state.week?"selected":""}>W${p.week}</option>`).join("");
-  $("#weekSelect").onchange = e => {state.week=+e.target.value; save(); render();};
-  document.querySelectorAll(".tab").forEach(b => b.onclick = () => {state.tab=b.dataset.tab; save(); render();});
-  render();
+function workoutTypeLabel(t){return t==="longbike"?"Long bike":t==="swim"?"Swim":t==="bjj"?"BJJ":t==="lift"?"Lift":t==="run"?"Run":t==="bike"?"Bike":t}
+function moveRecommendation(reason, disrupted){
+  if(disrupted==="longbike") return "Move the long bike to the next available day. Shorten or skip the long run. Do not cram both long bike and long run at full volume.";
+  if(disrupted==="swim") return "Replace optional lift, easy bike, or easy run with a swim. Keep the long bike protected.";
+  if(disrupted==="bjj") return "Do not make up BJJ unless you want to. Resume the next scheduled BJJ day. If moved to Friday, keep it technical before long bike.";
+  if(disrupted==="lift") return "Skip it. Do not make up lifting. Strength is maintenance during this build.";
+  if(disrupted==="run") return "Skip or shorten it. Your run base is not the limiter. Keep swim and long bike protected.";
+  if(disrupted==="whole") return "Protect the week’s anchors: long bike, 2–3 swims, and one brick. Cut lift, optional BJJ intensity, and easy run first.";
+  if(reason==="travel") return "Use travel week mode: swim if easy, run if convenient, hotel bike if available. Do not chase missed volume.";
+  if(reason==="weather") return "Move outside bike indoors if possible, or swap with swim/run. Preserve long-bike duration when feasible.";
+  if(reason==="pain") return "Pain override: avoid the affected discipline and keep only pain-free easy work. Do not use workouts to test pain.";
+  return "Move critical workouts first. Cut optional sessions instead of cramming missed work.";
 }
-function syncShell(){
-  $("#weekSelect").value = state.week;
-  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===state.tab));
-}
-function decision(){
-  const feel = state.feel, garmin = state.garmin, lim = state.limiter;
-  if (feel==="red") return ["red","Critical only or rest. Skip optional work."];
-  if (feel==="yellow") return ["yellow","Use minimum versions. Keep critical swim/bike if possible."];
-  if (garmin==="red") return ["yellow","You feel okay but Garmin is red: keep intensity easy."];
-  if (lim && lim!=="none") return ["yellow",`Limiter: ${lim}. Use minimums for affected sessions.`];
-  if (feel==="green") return ["green","Full plan is reasonable."];
-  return ["yellow","Tap Green / Yellow / Red to get an adjusted plan."];
-}
-function render(){
-  syncShell();
-  if(state.tab==="today") renderToday();
-  if(state.tab==="week") renderWeek();
-  if(state.tab==="swim") renderSwim();
-  if(state.tab==="ready") renderReady();
-}
-function renderToday(){
-  const p=planWeek(), [dclass,dtext]=decision();
-  $("#screen").innerHTML = `
-    <div class="stack">
-      <section class="card stack">
-        <div class="row">
-          <div>
-            <div class="eyebrow">Week ${p.week} · ${p.phase}</div>
-            <h2>${state.day}</h2>
-            <p>${p.goal}</p>
-          </div>
-          <select id="daySelect" style="max-width:140px">${DAYS.map(d=>`<option ${d===state.day?"selected":""}>${d}</option>`).join("")}</select>
-        </div>
-        <div>
-          <h3>How are you today?</h3>
-          <div class="seg" style="margin-top:8px;">
-            ${choiceBtn("feel","green","Green","green")}
-            ${choiceBtn("feel","yellow","Yellow","yellow")}
-            ${choiceBtn("feel","red","Red","red")}
-          </div>
-        </div>
-        <details>
-          <summary>Optional: add Garmin / limiter</summary>
-          <div class="stack" style="margin-top:12px;">
-            <div>
-              <label>Garmin readiness</label>
-              <div class="seg four" style="margin-top:7px;">
-                ${choiceBtn("garmin","green","Green","green")}
-                ${choiceBtn("garmin","yellow","Yellow","yellow")}
-                ${choiceBtn("garmin","red","Red","red")}
-                ${choiceBtn("garmin",null,"Skip","")}
-              </div>
-            </div>
-            <div>
-              <label>Main limiter</label>
-              <div class="seg four" style="margin-top:7px;">
-                ${choiceBtn("limiter","none","None","")}
-                ${choiceBtn("limiter","shoulders","Shoulders","")}
-                ${choiceBtn("limiter","legs","Legs","")}
-                ${choiceBtn("limiter","time","Time","")}
-              </div>
-              <div class="seg two" style="margin-top:8px;">
-                ${choiceBtn("limiter","general fatigue","General fatigue","")}
-                ${choiceBtn("limiter","neck/back","Neck/back","")}
-              </div>
-            </div>
-          </div>
-        </details>
-        <div class="soft"><span class="pill status ${dclass}">${dclass.toUpperCase()}</span> <strong>${dtext}</strong></div>
-      </section>
-
-      <section class="stack">
-        ${dayWorkouts().map((w,i)=>renderWorkout(w,i)).join("")}
-      </section>
-    </div>
-  `;
-  $("#daySelect").onchange = e => {state.day=e.target.value; save(); render();};
-  bindChoices();
-  bindWorkoutActions();
-}
-function choiceBtn(field,value,label,color){
-  const active = state[field]===value || (value===null && !state[field]);
-  return `<button class="btn choice ${color||""} ${active?"active":""}" data-field="${field}" data-value="${value===null?"":value}">${label}</button>`;
-}
-function bindChoices(){
-  document.querySelectorAll("[data-field]").forEach(b=> b.onclick = () => {
-    const val = b.dataset.value || null;
-    state[b.dataset.field] = val;
-    save(); render();
-  });
-}
-function keyFor(i){ return `w${state.week}-${state.day}-${i}`;}
-function renderWorkout(w,i){
-  const key=keyFor(i), done=state.done[key]?.status;
-  const affected = adjustment(w);
-  return `
-    <div class="workout ${done==="done"?"done":""}">
-      <div class="row">
-        <span class="pill ${w.priority.toLowerCase()}">${w.priority}</span>
-        <span class="pill">${w.type}</span>
-      </div>
-      <div class="wtitle">${w.title}</div>
-      <div class="detail">${w.desc}</div>
-      ${affected ? `<div class="soft mini" style="margin-top:10px;"><strong>Adjustment:</strong> ${affected}</div>` : ""}
-      <div class="seg" style="margin-top:12px;">
-        <button class="btn green" data-action="done" data-i="${i}">Done</button>
-        <button class="btn yellow" data-action="partial" data-i="${i}">Partial</button>
-        <button class="btn red" data-action="skipped" data-i="${i}">Skipped</button>
-      </div>
-      ${state.done[key] ? postPrompt(w,i) : ""}
-    </div>
-  `;
-}
-function adjustment(w){
-  if(state.feel==="red" && w.priority!=="Critical") return "Skip today.";
-  if(state.feel==="red" && w.priority==="Critical") return "Minimum version only.";
-  if(state.feel==="yellow" && w.priority==="Optional") return "Optional: skip or keep technique-only.";
-  if(state.garmin==="red" && (w.type==="bike" || w.type==="longbike" || w.type==="run")) return "Keep intensity easy.";
-  if(state.limiter==="shoulders" && (w.type==="swim" || w.type==="bjj")) return "Technique-only; no hard pulling/rolling.";
-  if(state.limiter==="legs" && (w.type==="bike" || w.type==="longbike" || w.type==="run" || w.type==="bjj")) return "Use minimum / Zone 2.";
-  if(state.limiter==="time") return "Use the minimum version.";
+function bjjGuidance(){
+  const p=state.bjjPattern;
+  if(p==="montue") return "BJJ Mon/Tue: keep Monday swim easier if shoulders are cooked. Wednesday becomes bike + lift. Protect Saturday long bike.";
+  if(p==="tuewed") return "BJJ Tue/Wed: default best fit. Keep Wednesday bike controlled if BJJ is later.";
+  if(p==="tuedouble") return "Tuesday double only: good recovery spacing. Use Wednesday for bike quality.";
+  if(p==="oneday") return "One BJJ day: fine during harder tri weeks. Do not make up the second day.";
+  if(p==="skip") return "Skipping BJJ: useful during peak/taper or if shoulder/neck issues appear.";
   return "";
 }
-function bindWorkoutActions(){
-  document.querySelectorAll("[data-action]").forEach(b=>b.onclick=()=>{
-    const i=+b.dataset.i, key=keyFor(i), w=dayWorkouts()[i];
-    state.done[key] = {status:b.dataset.action, type:w.type, title:w.title, ts:new Date().toISOString()};
-    save(); toast(); render();
-  });
-  document.querySelectorAll("[data-post]").forEach(b=>b.onclick=()=>{
-    handlePost(b.dataset.post, +b.dataset.i, b.dataset.value);
-  });
-}
-function postPrompt(w,i){
-  if(w.type==="swim") return `
-    <div class="soft stack" style="margin-top:12px;">
-      <strong>Swim check</strong>
-      <div class="seg">
-        <button class="btn green" data-post="swimfeel" data-i="${i}" data-value="controlled">Controlled</button>
-        <button class="btn yellow" data-post="swimfeel" data-i="${i}" data-value="hard">Hard OK</button>
-        <button class="btn red" data-post="swimfeel" data-i="${i}" data-value="panic">Panic/bad</button>
-      </div>
-      <details><summary>Optional longest repeat</summary><div class="seg four" style="margin-top:8px;">${["25","50","100","300","500","continuous"].map(x=>`<button class="btn small" data-post="repeat" data-i="${i}" data-value="${x}">${x}</button>`).join("")}</div></details>
-    </div>`;
-  if(w.type==="longbike") return `
-    <div class="soft stack" style="margin-top:12px;">
-      <strong>Long bike check</strong>
-      <div class="seg">
-        <button class="btn green" data-post="fuel" data-i="${i}" data-value="good">Fuel good</button>
-        <button class="btn yellow" data-post="fuel" data-i="${i}" data-value="okay">Fuel okay</button>
-        <button class="btn red" data-post="fuel" data-i="${i}" data-value="bad">Fuel bad</button>
-      </div>
-      <div class="seg two">
-        <button class="btn green" data-post="brick" data-i="${i}" data-value="yes">Brick done</button>
-        <button class="btn yellow" data-post="brick" data-i="${i}" data-value="no">No brick</button>
-      </div>
-    </div>`;
-  if(w.type==="bjj") return `
-    <div class="soft stack" style="margin-top:12px;">
-      <strong>BJJ check</strong>
-      <div class="seg">
-        <button class="btn green" data-post="bjj" data-i="${i}" data-value="light">Light</button>
-        <button class="btn yellow" data-post="bjj" data-i="${i}" data-value="moderate">Moderate</button>
-        <button class="btn red" data-post="bjj" data-i="${i}" data-value="hard">Hard</button>
-      </div>
-      <details><summary>Optional damage</summary><div class="seg four" style="margin-top:8px;">${["none","shoulders","legs","neck/back"].map(x=>`<button class="btn small" data-post="damage" data-i="${i}" data-value="${x}">${x}</button>`).join("")}</div></details>
-    </div>`;
-  return "";
-}
-function handlePost(type,i,value){
-  const key=keyFor(i);
-  const obj = state.done[key] || {};
-  obj[type]=value; state.done[key]=obj;
-  if(type==="swimfeel"){
-    if(value==="controlled" && state.swimLevel<7) { state.swimLevel++; toast("Swim level progressed"); }
-    if(value==="panic" && state.swimLevel>1) { state.swimLevel--; toast("Swim level reduced"); }
-    if(value==="hard") toast("Repeat swim level");
-  }
-  if(type==="fuel"){
-    state.ready.fueling = value==="good" ? "green" : value==="okay" ? "yellow" : "red";
-    toast("Fueling updated");
-  }
-  if(type==="brick"){
-    if(value==="yes") state.ready.brick = state.ready.brick==="red" ? "yellow" : "green";
-    toast("Brick updated");
-  }
-  if(type==="bjj"){
-    if(value==="hard") { state.feel = state.feel==="green" ? "yellow" : state.feel; state.ready.bjj="yellow"; toast("Tomorrow: reduce intensity"); }
-    else toast("BJJ logged");
-  }
-  if(type==="damage" && value!=="none"){
-    state.limiter = value === "neck/back" ? "neck/back" : value;
-    state.ready.bjj="yellow";
-    toast("Limiter set");
-  }
-  save(); render();
-}
-function renderWeek(){
+function weeklyAnchorCounts(){
   const p=planWeek();
-  const all = Object.values(p.days).flat();
-  const critTotal = all.filter(x=>x.priority==="Critical").length;
-  const critDone = Object.entries(state.done).filter(([k,v])=>k.startsWith(`w${state.week}-`) && v.status==="done").length;
-  $("#screen").innerHTML = `
-    <div class="stack">
-      <section class="card stack">
-        <div class="row"><div><div class="eyebrow">Week ${p.week}</div><h2>${p.phase}</h2><p>${p.goal}</p></div><button class="btn small" id="resetWeek">Reset</button></div>
-        <div><div class="row mini"><strong>Completed sessions</strong><span>${critDone}</span></div><div class="meter"><div style="width:${Math.min(100,critDone/all.length*100)}%"></div></div></div>
-        <p class="mini">Do not chase 100%. Protect critical swim, long bike, and brick.</p>
-      </section>
-      ${DAYS.filter(d=>p.days[d]).map(day=>`
-        <section class="card stack">
-          <h3>${day}</h3>
-          ${p.days[day].map((w,i)=> {
-            const key=`w${state.week}-${day}-${i}`;
-            const s=state.done[key]?.status;
-            return `<div class="row soft"><div><span class="pill ${w.priority.toLowerCase()}">${w.priority}</span><div style="margin-top:5px;"><strong>${w.title}</strong></div><div class="mini muted">${w.desc}</div></div><span class="pill">${s||"open"}</span></div>`;
-          }).join("")}
-        </section>`).join("")}
-    </div>`;
-  $("#resetWeek").onclick=()=>{ Object.keys(state.done).forEach(k=>{ if(k.startsWith(`w${state.week}-`)) delete state.done[k]; }); save(); render(); };
+  let swims=0, bikes=0, longbike=false, brick=false, run=false;
+  DAYS.forEach(day=>(p.days[day]||[]).forEach((w,i)=>{
+    const k=`w${p.week}-${day}-${i}`, s=state.done[k]?.status;
+    if(!s || s==="skipped") return;
+    if(w.type==="swim") swims++;
+    if(w.type==="bike"||w.type==="longbike") bikes++;
+    if(w.type==="longbike"){longbike=true; if(state.done[k]?.brick==="yes") brick=true;}
+    if(w.type==="run") run=true;
+  }));
+  return {swims,bikes,longbike,brick,run};
 }
-function renderSwim(){
-  $("#screen").innerHTML = `
-    <div class="stack">
-      <section class="card stack">
-        <div class="row"><div><div class="eyebrow">Current swim level</div><h2>Level ${state.swimLevel}: ${SWIM_LEVELS[state.swimLevel-1][0]}</h2><p>${SWIM_LEVELS[state.swimLevel-1][1]}</p></div></div>
-        <div class="seg">
-          <button class="btn green" id="swimUp">Progress</button>
-          <button class="btn yellow" id="swimSame">Repeat</button>
-          <button class="btn red" id="swimDown">Reduce</button>
-        </div>
-        <p class="mini">Progress only when breathing is controlled and the set feels like practice, not survival.</p>
-      </section>
-      ${SWIM_LEVELS.map((l,idx)=>`
-        <section class="level ${idx+1===state.swimLevel?"current":""}">
-          <div class="row"><strong>Level ${idx+1}: ${l[0]}</strong>${idx+1===state.swimLevel?'<span class="pill">Current</span>':''}</div>
-          <p style="margin-top:6px;">${l[1]}</p>
-          <div class="soft mini" style="margin-top:8px;"><strong>Unlock:</strong> ${l[2]}</div>
-        </section>`).join("")}
-      <section class="card stack">
-        <h2>Starter sets</h2>
-        <div class="soft"><strong>500 yd:</strong> 4x25 warmup, 4x25 drill, 8x25 main, 4x25 cooldown.</div>
-        <div class="soft"><strong>800 yd:</strong> 4x25 warmup, 4x25 drill, 8x25, 4x50, 4x25 easy, 4x25 cooldown.</div>
-        <div class="soft"><strong>1,500 yd:</strong> 200 warmup, 6x50 drill, 8x100 main, 200 cooldown.</div>
-      </section>
-    </div>`;
-  $("#swimUp").onclick=()=>{ if(state.swimLevel<7) state.swimLevel++; save(); toast("Progressed"); render(); };
-  $("#swimSame").onclick=()=>toast("Repeat current level");
-  $("#swimDown").onclick=()=>{ if(state.swimLevel>1) state.swimLevel--; save(); toast("Reduced"); render(); };
+function anchorStatusHtml(){
+  const a=weeklyAnchorCounts();
+  const item=(name,ok,detail)=>`<div class="row soft"><div><strong>${name}</strong><div class="mini muted">${detail}</div></div><span class="pill status ${ok?"green":"yellow"}">${ok?"OK":"Needs work"}</span></div>`;
+  return item("Long bike",a.longbike,"Most important bike durability anchor")+
+    item("Swim frequency",a.swims>=2,`${a.swims}/3 logged; 2 is minimum, 3 is ideal`)+
+    item("Brick",a.brick,"10–30 min run off bike")+
+    item("Bike frequency",a.bikes>=2,`${a.bikes}/3 logged; 2 minimum`)+
+    item("Run maintenance",a.run,"Run is important but not the limiter");
 }
-function renderReady(){
-  const items = [
-    ["swim","Swim","Green: 1,500 yd continuous or 3 x 500 controlled."],
-    ["bike","Bike","Green: 3.5–4 hr long ride or roughly 45–55 mi."],
-    ["brick","Brick","Green: 25–30 min run off long bike."],
-    ["run","Run","Green: 80–100 min easy long run."],
-    ["fueling","Fueling","Green: 60g+ carbs/hr practiced."],
-    ["openwater","Open water","Green: 1–2 calm open-water swims."],
-    ["bjj","BJJ fatigue","Green: no recurring shoulder/neck/knee issue."]
+function swimWorkoutForLevel(){
+  const l=state.swimLevel;
+  const workouts=[
+    ["Level 1 — Calm 25s","4 x 25 easy\\n4 x 25 breathing drill\\n8 x 25 easy freestyle\\n4 x 25 cooldown\\nTotal: 500 yd"],
+    ["Level 2 — Calm 50s","4 x 25 easy\\n4 x 25 drill\\n6 x 50 easy\\n4 x 25 cooldown\\nTotal: 700 yd"],
+    ["Level 3 — First 100s","200 easy\\n4 x 50 drill\\n4 x 100 easy\\n4 x 50 relaxed\\nTotal: 1,000 yd"],
+    ["Level 4 — 300 blocks","200 easy\\n4 x 50 drill\\n3 x 300 steady\\n100 cooldown\\nTotal: 1,400 yd"],
+    ["Level 5 — 500 blocks","300 easy\\n4 x 50 drill\\n3 x 500 steady\\n200 cooldown\\nTotal: 2,200 yd"],
+    ["Level 6 — Pool race-ready","300 easy\\n1,500 continuous OR 3 x 500\\n200 cooldown\\nTotal: 2,000 yd"],
+    ["Level 7 — Open-water ready","Pool: 2,000 relaxed total\\nOpen water: 30–40 min calm effort\\nPractice sighting every 6–10 strokes"]
   ];
-  const score = Math.round(items.reduce((a,[k])=>a+(state.ready[k]==="green"?2:state.ready[k]==="yellow"?1:0),0)/(items.length*2)*100);
-  $("#screen").innerHTML = `
-    <div class="stack">
-      <section class="card stack">
-        <div class="row"><div><div class="eyebrow">Race readiness</div><h2>${score}%</h2><p>Completion is less important than these benchmarks.</p></div></div>
-        <div class="meter"><div style="width:${score}%"></div></div>
-      </section>
-      ${items.map(([k,name,desc])=>`
-        <section class="card stack">
-          <div class="row"><div><h3>${name}</h3><p class="mini">${desc}</p></div><span class="pill status ${state.ready[k]}">${state.ready[k].toUpperCase()}</span></div>
-          <div class="seg">
-            ${["red","yellow","green"].map(s=>`<button class="btn ${s} ${state.ready[k]===s?"active":""}" data-ready="${k}" data-value="${s}">${s}</button>`).join("")}
-          </div>
-        </section>`).join("")}
-      <section class="card stack">
-        <h2>Checkpoint rules</h2>
-        <div class="soft"><strong>Week 4:</strong> 1,000 yd swim total, 2 hr ride, 15 min brick.</div>
-        <div class="soft"><strong>Week 8:</strong> 1,500–2,000 yd swim total, 3 hr ride, 75–90 min run.</div>
-        <div class="soft"><strong>Week 10:</strong> race-distance swim total, 3.5–4 hr ride, 25–30 min brick, fueling practiced.</div>
-      </section>
-    </div>`;
-  document.querySelectorAll("[data-ready]").forEach(b=>b.onclick=()=>{ state.ready[b.dataset.ready]=b.dataset.value; save(); render();});
+  return workouts[l-1];
 }
+function longBikeFuelTarget(){
+  const p=currentWeek();
+  if(p<=2) return "Practice drinking while riding. Optional 30–45g carbs/hr.";
+  if(p<=4) return "Target 30–45g carbs/hr. Sip every 10–15 min.";
+  if(p<=6) return "Target 45–60g carbs/hr. Take something every 15 min.";
+  if(p<=8) return "Target about 60g carbs/hr. Practice race setup.";
+  return "Target 60–90g carbs/hr. This is race rehearsal.";
+}
+function askChatContext(){
+  const p=planWeek(), day=currentDay();
+  const ready=Object.entries(state.ready).map(([k,v])=>`${k}: ${v}`).join(", ");
+  const workouts=(p.days[day]||[]).map(w=>w.title).join("; ");
+  return `I am training for a 70.3. Week ${p.week} (${p.phase}), ${day}. Today's plan: ${workouts}. Readiness: ${state.feel||"not selected"}. Limiter: ${state.limiter||"none"}. Swim level: Level ${state.swimLevel} (${SWIM[state.swimLevel-1][0]}). Race readiness: ${ready}. BJJ pattern this week: ${state.bjjPattern}. What should I do today, what should I avoid, and how should I adjust if plans change?`;
+}
+function equipmentChecklistHtml(){
+  const items=["Helmet","Flat kit","Two bottles/cages","Can drink while riding","Can eat while riding","Bike fit comfortable","Goggles tested","Backup goggles","Open-water swim practiced","Race nutrition chosen","Watch/computer charged"];
+  return items.map((x,i)=>`<label class="row soft"><span>${x}</span><input type="checkbox" data-equip="${i}" ${state.equipment&&state.equipment[i]?"checked":""} style="width:auto;min-height:auto"></label>`).join("");
+}
+function renderAdjust(){
+  const selected=typeof state.adjustWorkoutIndex==="number"?dayWorkouts()[state.adjustWorkoutIndex]:null;
+  $("#screen").innerHTML=`<div class="stack">
+    <section class="card stack"><div><div class="eyebrow">Move / Adjust</div><h2>Protect the anchors</h2><p>Move critical work first. Cut optional work instead of cramming.</p></div>
+      ${selected?`<div class="soft"><strong>Selected:</strong> ${selected.title}</div>`:""}
+      <div class="field"><label>Why are you adjusting?</label><select id="adjustReason"><option value="social">Social plans</option><option value="tired">Too tired</option><option value="bjj">BJJ moved</option><option value="travel">Travel</option><option value="weather">Weather</option><option value="pain">Injury/pain</option><option value="pool">No pool/bike access</option></select></div>
+      <div class="field"><label>What got disrupted?</label><select id="disrupted"><option value="${selected?selected.type:"whole"}">${selected?workoutTypeLabel(selected.type):"Whole day"}</option><option value="longbike">Long bike</option><option value="swim">Swim</option><option value="run">Run</option><option value="bjj">BJJ</option><option value="lift">Lift</option><option value="whole">Whole day</option></select></div>
+      <button class="btn primary" id="getMoveRule">Get recommendation</button>
+      <div id="moveOut" class="soft"><strong>Rule:</strong> Pick a reason and disrupted workout.</div>
+    </section>
+    <section class="card stack"><h2>BJJ this week</h2><p class="mini">Choose the real BJJ pattern and let the week adjust around it.</p>
+      <div class="seg two">
+        ${bjjBtn("montue","Mon/Tue")}
+        ${bjjBtn("tuewed","Tue/Wed")}
+        ${bjjBtn("tuedouble","Tue double only")}
+        ${bjjBtn("oneday","One day only")}
+        ${bjjBtn("skip","Skip BJJ")}
+      </div>
+      <div class="soft"><strong>Guidance:</strong> ${bjjGuidance()}</div>
+    </section>
+    <section class="card stack"><h2>Minimum viable week</h2>
+      <div class="soft"><strong>Full:</strong> 3 swims, 3 bikes, 2 runs, 2 BJJ days, 2 lifts.</div>
+      <div class="soft"><strong>Minimum:</strong> 2 swims, 1 long bike, 1 brick, 1 easy run. BJJ/lift optional.</div>
+      <div class="soft"><strong>Travel:</strong> Swim if available, easy runs if convenient, hotel bike optional. No guilt.</div>
+    </section>
+    <section class="card stack"><h2>Missed workout rules</h2>
+      <div class="soft"><strong>Missed swim:</strong> replace optional lift/easy run/easy bike.</div>
+      <div class="soft"><strong>Missed long bike:</strong> move once, reduce long run.</div>
+      <div class="soft"><strong>Missed run/lift/BJJ:</strong> usually skip, do not make up.</div>
+      <div class="soft"><strong>Missed brick:</strong> add 10 min after next bike.</div>
+    </section>
+  </div>`;
+  document.querySelectorAll("[data-bjj]").forEach(b=>b.onclick=()=>{state.bjjPattern=b.dataset.bjj;save();render()});
+  $("#getMoveRule").onclick=()=>{$("#moveOut").innerHTML=`<strong>Recommendation:</strong> ${moveRecommendation($("#adjustReason").value,$("#disrupted").value)}`;};
+}
+function bjjBtn(val,label){return `<button class="btn ${state.bjjPattern===val?"primary":"ghost"}" data-bjj="${val}">${label}</button>`}
+
+function renderSettings(){const ds=daysSinceStart();$("#screen").innerHTML=`<div class="stack"><section class="card stack"><div><div class="eyebrow">Schedule</div><h2>${isPreseason()?"Preseason active":`Week ${currentWeek()} active`}</h2><p>${state.autoSchedule?`Auto schedule uses ${fmt(state.startDate)} as Week 1 start.`:"Manual week mode is on."}</p></div><div class="field"><label>Week 1 start date</label><input id="startDate" type="date" value="${state.startDate}"></div><div class="field"><label>Race date</label><input id="raceDate" type="date" value="${state.raceDate}"></div><div class="seg two"><button class="btn ${state.autoSchedule?"primary":"ghost"}" id="autoToggle">${state.autoSchedule?"Auto on":"Auto off"}</button><button class="btn ghost" id="setManual">Manual week</button></div></section><section class="card stack"><h2>Reset</h2><div class="seg two"><button class="btn yellow" id="resetDay">Reset today</button><button class="btn yellow" id="resetWeek2">Reset week</button></div><button class="btn red" id="resetAll">Reset all app data</button></section><section class="card stack"><h2>Export / import progress</h2><p class="mini">Use this to move progress between phone and desktop. Copy from one device, paste into the other.</p><textarea id="exportBox" readonly>${exportText()}</textarea><button class="btn ghost" id="copyExport">Copy export</button><details><summary>Import progress</summary><div class="stack" style="margin-top:12px"><textarea id="importBox" placeholder="Paste export text here"></textarea><button class="btn primary" id="importBtn">Import</button></div></details></section><section class="card stack"><h2>Install note</h2><p class="mini">After updating GitHub, reopen the home-screen app or refresh Safari. If it looks stale, delete and re-add the home-screen icon.</p></section></div>`;$("#startDate").onchange=e=>{state.startDate=e.target.value;save();render()};$("#raceDate").onchange=e=>{state.raceDate=e.target.value;save();render()};$("#autoToggle").onclick=()=>{state.autoSchedule=!state.autoSchedule;save();render()};$("#setManual").onclick=()=>{state.autoSchedule=false;state.manualWeek=currentWeek();save();render()};$("#resetDay").onclick=()=>{Object.keys(state.done).forEach(k=>{if(k.startsWith(`w${currentWeek()}-${currentDay()}-`))delete state.done[k]});save();toast("Today reset");render()};$("#resetWeek2").onclick=()=>{Object.keys(state.done).forEach(k=>{if(k.startsWith(`w${currentWeek()}-`))delete state.done[k]});save();toast("Week reset");render()};$("#resetAll").onclick=()=>{if(confirm("Reset all progress and settings?")){localStorage.removeItem("tri703mobilev2");state=load();toast("Reset");render()}};$("#copyExport").onclick=async()=>{try{await navigator.clipboard.writeText(exportText());toast("Copied")}catch{toast("Copy failed")}};$("#importBtn").onclick=()=>importText($("#importBox").value)}
 init();
 </script>
 </body>
